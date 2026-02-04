@@ -2,6 +2,10 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 
+// --- CONNECTION ---
+// This pulls the URL from your .env.local file
+const ENDPOINT_URL = process.env.NEXT_PUBLIC_APPS_SCRIPT_URL;
+
 // ═══════════════════════════════════════════════════════════
 // ALIGN WITHIN — MVP Website
 // Complete self-awareness assessment with scoring + results
@@ -31,6 +35,7 @@ const COLORS = {
   green: "#7A8B6F",
 };
 
+// ... rest of your component (export default function Page() { ... })
 // ── FONT IMPORTS (loaded via style tag) ──
 const FONTS = {
   display: "'Playfair Display', Georgia, serif",
@@ -1553,9 +1558,6 @@ function ContactPage({ setPage }) {
 // MAIN APP
 // ═══════════════════════════════════════════════════════════
 
-// ── CONFIGURATION ──
-// Replace this URL with your Google Apps Script Web App URL after deployment
-const ENDPOINT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
 export default function AlignWithin() {
   const [page, setPage] = useState("landing");
