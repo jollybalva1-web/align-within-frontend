@@ -1068,6 +1068,7 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
     
     // Prepare data for Google Sheet
     const payload = {
+      type: "assessment",
       email: email,
       context: submissionData.context,
       vignetteAnswer: submissionData.vignetteAnswer,
@@ -1503,33 +1504,124 @@ function ContactPage({ setPage }) {
   const [contactEmail, setContactEmail] = useState("");
   const [message, setMessage] = useState("");
 
+  const handleContactSubmit = async () => {
+    if (!contactEmail.includes("@") || !message) return;
+
+    const payload = {
+      type: "contact", // REQUIRED by Apps Script
+      name: name,
+      email: contactEmail,
+      message: message,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      await fetch(ENDPOINT_URL, {
+        method: "POST",
+        mode: "no-cors", // Required for Apps Script
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      setSent(true);
+    } catch (err) {
+      console.error("Contact submission failed", err);
+      setSent(true); // UX-safe fallback
+    }
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
       <div style={{ maxWidth: "520px", margin: "0 auto", padding: "40px 24px 80px" }}>
-        <h1 style={{ fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600, color: COLORS.charcoal, marginBottom: "8px" }}>
+        <h1
+          style={{
+            fontFamily: FONTS.display,
+            fontSize: "32px",
+            fontWeight: 600,
+            color: COLORS.charcoal,
+            marginBottom: "8px",
+          }}
+        >
           Contact Us
         </h1>
-        <p style={{ fontFamily: FONTS.body, fontSize: "16px", color: COLORS.warmGray, marginBottom: "32px" }}>
+
+        <p
+          style={{
+            fontFamily: FONTS.body,
+            fontSize: "16px",
+            color: COLORS.warmGray,
+            marginBottom: "32px",
+          }}
+        >
           Questions, feedback, or data deletion requests — we're here.
         </p>
 
         {!sent ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div>
-              <label style={{ fontSize: "14px", fontWeight: 500, color: COLORS.charcoal, marginBottom: "6px", display: "block" }}>Name</label>
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
+              <label
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: COLORS.charcoal,
+                  marginBottom: "6px",
+                  display: "block",
+                }}
+              >
+                Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+              />
             </div>
+
             <div>
-              <label style={{ fontSize: "14px", fontWeight: 500, color: COLORS.charcoal, marginBottom: "6px", display: "block" }}>Email</label>
-              <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="your@email.com" />
+              <label
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: COLORS.charcoal,
+                  marginBottom: "6px",
+                  display: "block",
+                }}
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="your@email.com"
+              />
             </div>
+
             <div>
-              <label style={{ fontSize: "14px", fontWeight: 500, color: COLORS.charcoal, marginBottom: "6px", display: "block" }}>Message</label>
-              <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={5} placeholder="How can we help?" style={{ resize: "vertical" }} />
+              <label
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: COLORS.charcoal,
+                  marginBottom: "6px",
+                  display: "block",
+                }}
+              >
+                Message
+              </label>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows={5}
+                placeholder="How can we help?"
+                style={{ resize: "vertical" }}
+              />
             </div>
+
             <button
               className="btn-primary"
-              onClick={() => setSent(true)}
+              onClick={handleContactSubmit}
               disabled={!contactEmail.includes("@") || !message}
               style={{ marginTop: "8px" }}
             >
@@ -1539,20 +1631,32 @@ function ContactPage({ setPage }) {
         ) : (
           <div className="card" style={{ textAlign: "center", padding: "40px" }}>
             <div style={{ fontSize: "32px", marginBottom: "12px" }}>✓</div>
-            <p style={{ fontFamily: FONTS.body, fontSize: "16px", color: COLORS.charcoal }}>
+            <p
+              style={{
+                fontFamily: FONTS.body,
+                fontSize: "16px",
+                color: COLORS.charcoal,
+              }}
+            >
               Message sent. We'll get back to you soon.
             </p>
           </div>
         )}
 
-        <button className="btn-secondary" onClick={() => setPage("landing")} style={{ marginTop: "24px" }}>
+        <button
+          className="btn-secondary"
+          onClick={() => setPage("landing")}
+          style={{ marginTop: "24px" }}
+        >
           ← Back to Home
         </button>
       </div>
+
       <Footer setPage={setPage} />
     </div>
   );
 }
+
 
 // ═══════════════════════════════════════════════════════════
 // MAIN APP
