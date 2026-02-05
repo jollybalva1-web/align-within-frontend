@@ -1083,7 +1083,6 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
       if (endpointUrl && endpointUrl !== "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
         await fetch(endpointUrl, {
           method: "POST",
-          mode: "no-cors", // Required for Apps Script
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
@@ -1518,7 +1517,6 @@ function ContactPage({ setPage }) {
     try {
       await fetch(ENDPOINT_URL, {
         method: "POST",
-        mode: "no-cors", // Required for Apps Script
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
