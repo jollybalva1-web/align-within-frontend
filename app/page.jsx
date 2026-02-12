@@ -1503,30 +1503,33 @@ function ContactPage({ setPage }) {
   const [contactEmail, setContactEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleContactSubmit = async () => {
-    if (!contactEmail.includes("@") || !message) return;
+const handleContactSubmit = async () => {
+  if (!contactEmail.includes("@") || !message) return;
 
-    const payload = {
-      type: "contact", // REQUIRED by Apps Script
-      name: name,
-      email: contactEmail,
-      message: message,
-      timestamp: new Date().toISOString(),
-    };
-
-    try {
-      await fetch(ENDPOINT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload),
-      });
-
-      setSent(true);
-    } catch (err) {
-      console.error("Contact submission failed", err);
-      setSent(true); // UX-safe fallback
-    }
+  const payload = {
+    type: "contact",
+    name: name,
+    email: contactEmail,
+    message: message,
+    timestamp: new Date().toISOString(),
   };
+
+  try {
+    // We remove 'application/json' to bypass CORS blocking
+    await fetch(ENDPOINT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8", 
+      },
+      body: JSON.stringify(payload),
+    });
+
+    setSent(true);
+  } catch (err) {
+    console.error("Contact submission failed", err);
+    setSent(true); 
+  }
+};
 
   return (
     <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
