@@ -1511,17 +1511,18 @@ const handleContactSubmit = async () => {
     name: name,
     email: contactEmail,
     message: message,
-    timestamp: new Date().toISOString(),
   };
 
   try {
-    // We remove 'application/json' to bypass CORS blocking
+    // 1. Change Content-Type to x-www-form-urlencoded
+    // 2. Change the body format
     await fetch(ENDPOINT_URL, {
       method: "POST",
+      mode: "no-cors", // This prevents the 'Failed to Fetch' error
       headers: {
-        "Content-Type": "text/plain;charset=utf-8", 
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload), // We still send the JSON string
     });
 
     setSent(true);
