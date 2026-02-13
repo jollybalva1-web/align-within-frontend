@@ -1515,25 +1515,23 @@ const handleContactSubmit = async () => {
   };
 
   try {
-    // Use a form submission approach for Google Apps Script
-    const response = await fetch(ENDPOINT_URL, {
+    // Google Apps Script requires this specific approach
+    await fetch(ENDPOINT_URL, {
       method: "POST",
+      mode: "no-cors", // Required for cross-origin to Apps Script
       headers: {
-        "Content-Type": "text/plain", // This avoids CORS preflight
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
 
-    // Check if request was successful
-    if (response.ok) {
-      setSent(true);
-    } else {
-      console.error("Contact submission failed:", response.status);
-      alert("Failed to send message. Please try again.");
-    }
+    // With no-cors, we can't read the response, so we assume success
+    // The error email to yourself will alert you if something goes wrong
+    setSent(true);
+    
   } catch (err) {
     console.error("Contact submission failed", err);
-    alert("Failed to send message. Please try again or email us directly at jollybalva1@gmail.com");
+    alert("Failed to send message. Please email us directly at jollybalva1@gmail.com");
   }
 };
 
