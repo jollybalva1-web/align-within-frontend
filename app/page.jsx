@@ -1500,78 +1500,85 @@ function TermsPage({ setPage }) {
 // ── CONTACT PAGE ──
 function ContactPage({ setPage }) {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
   const [name, setName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [message, setMessage] = useState("");
+  const iframeRef = useRef(null);
 
-const handleContactSubmit = async () => {
-  if (!contactEmail.includes("@") || !message) return;
-
-  const payload = {
-    type: "contact",
-    name: name,
-    email: contactEmail,
-    message: message,
-  };
-
-  try {
-    // This approach works reliably with Google Apps Script
-    const response = await fetch(ENDPOINT_URL, {
-      method: "POST",
-      redirect: "follow",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
-      body: JSON.stringify(payload),
+  const handleContactSubmit = () => {
+    if (!contactEmail.includes("@") || !message) return;
+    
+    setSending(true);
+    
+    // Create hidden form and submit to iframe
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = ENDPOINT_URL;
+    form.target = 'hidden_iframe';
+    
+    // Add payload as a hidden field
+    const payloadInput = document.createElement('input');
+    payloadInput.type = 'hidden';
+    payloadInput.name = 'payload';
+    payloadInput.value = JSON.stringify({
+      type: "contact",
+      name: name,
+      email: contactEmail,
+      message: message,
     });
-
-    setSent(true);
-  } catch (err) {
-    console.error("Contact submission failed", err);
-    // Still show success because no-cors errors are misleading
-    // You'll get an error email if it actually failed
-    setSent(true);
-  }
-};
+    form.appendChild(payloadInput);
+    
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+    
+    // Show success after a short delay (form submission is fire-and-forget)
+    setTimeout(() => {
+      setSending(false);
+      setSent(true);
+    }, 1500);
+  };
 
   return (
     <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
+      {/* Hidden iframe for form submission */}
+      <iframe 
+        name="hidden_iframe" 
+        ref={iframeRef}
+        style={{ display: 'none' }} 
+      />
+      
       <div style={{ maxWidth: "520px", margin: "0 auto", padding: "40px 24px 80px" }}>
-        <h1
-          style={{
-            fontFamily: FONTS.display,
-            fontSize: "32px",
-            fontWeight: 600,
-            color: COLORS.charcoal,
-            marginBottom: "8px",
-          }}
-        >
+        <h1 style={{
+          fontFamily: FONTS.display,
+          fontSize: "32px",
+          fontWeight: 600,
+          color: COLORS.charcoal,
+          marginBottom: "8px",
+        }}>
           Contact Us
         </h1>
 
-        <p
-          style={{
-            fontFamily: FONTS.body,
-            fontSize: "16px",
-            color: COLORS.warmGray,
-            marginBottom: "32px",
-          }}
-        >
+        <p style={{
+          fontFamily: FONTS.body,
+          fontSize: "16px",
+          color: COLORS.warmGray,
+          marginBottom: "32px",
+        }}>
           Questions, feedback, or data deletion requests — we're here.
         </p>
 
         {!sent ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div>
-              <label
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: COLORS.charcoal,
-                  marginBottom: "6px",
-                  display: "block",
-                }}
-              >
+              <label style={{
+                fontSize: "14px",
+                fontWeight: 500,
+                color: COLORS.charcoal,
+                marginBottom: "6px",
+                display: "block",
+              }}>
                 Name
               </label>
               <input
@@ -1583,15 +1590,13 @@ const handleContactSubmit = async () => {
             </div>
 
             <div>
-              <label
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: COLORS.charcoal,
-                  marginBottom: "6px",
-                  display: "block",
-                }}
-              >
+              <label style={{
+                fontSize: "14px",
+                fontWeight: 500,
+                color: COLORS.charcoal,
+                marginBottom: "6px",
+                display: "block",
+              }}>
                 Email
               </label>
               <input
@@ -1603,15 +1608,13 @@ const handleContactSubmit = async () => {
             </div>
 
             <div>
-              <label
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: COLORS.charcoal,
-                  marginBottom: "6px",
-                  display: "block",
-                }}
-              >
+              <label style={{
+                fontSize: "14px",
+                fontWeight: 500,
+                color: COLORS.charcoal,
+                marginBottom: "6px",
+                display: "block",
+              }}>
                 Message
               </label>
               <textarea
@@ -1626,22 +1629,20 @@ const handleContactSubmit = async () => {
             <button
               className="btn-primary"
               onClick={handleContactSubmit}
-              disabled={!contactEmail.includes("@") || !message}
+              disabled={!contactEmail.includes("@") || !message || sending}
               style={{ marginTop: "8px" }}
             >
-              Send Message
+              {sending ? "Sending..." : "Send Message"}
             </button>
           </div>
         ) : (
           <div className="card" style={{ textAlign: "center", padding: "40px" }}>
             <div style={{ fontSize: "32px", marginBottom: "12px" }}>✓</div>
-            <p
-              style={{
-                fontFamily: FONTS.body,
-                fontSize: "16px",
-                color: COLORS.charcoal,
-              }}
-            >
+            <p style={{
+              fontFamily: FONTS.body,
+              fontSize: "16px",
+              color: COLORS.charcoal,
+            }}>
               Message sent. We'll get back to you soon.
             </p>
           </div>
