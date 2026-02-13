@@ -1515,21 +1515,25 @@ const handleContactSubmit = async () => {
   };
 
   try {
-    // 1. Change Content-Type to x-www-form-urlencoded
-    // 2. Change the body format
-    await fetch(ENDPOINT_URL, {
+    // Use a form submission approach for Google Apps Script
+    const response = await fetch(ENDPOINT_URL, {
       method: "POST",
-      mode: "no-cors", // This prevents the 'Failed to Fetch' error
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "text/plain", // This avoids CORS preflight
       },
-      body: JSON.stringify(payload), // We still send the JSON string
+      body: JSON.stringify(payload),
     });
 
-    setSent(true);
+    // Check if request was successful
+    if (response.ok) {
+      setSent(true);
+    } else {
+      console.error("Contact submission failed:", response.status);
+      alert("Failed to send message. Please try again.");
+    }
   } catch (err) {
     console.error("Contact submission failed", err);
-    setSent(true); 
+    alert("Failed to send message. Please try again or email us directly at jollybalva1@gmail.com");
   }
 };
 
