@@ -1068,16 +1068,32 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
     setSubmitting(true);
     
     // Prepare data for Google Sheet
-    const payload = {
-      type: "assessment",
-      email: email,
-      context: submissionData.context,
-      vignetteAnswer: submissionData.vignetteAnswer,
-      answers: submissionData.answers,
-      scores: submissionData.scores,
-      feedbackRating: feedbackRating,
-      timestamp: new Date().toISOString(),
-    };
+const payload = {
+  type: "assessment",
+
+  name: "Anonymous",              // You don't collect name yet
+  email: email,
+
+  ageConfirmed: "Yes",            // Since they passed age gate
+  context: submissionData.context,
+
+  careerVignette:
+    submissionData.context === "career"
+      ? submissionData.vignetteAnswer
+      : "",
+
+  relationshipVignette:
+    submissionData.context === "relationships"
+      ? submissionData.vignetteAnswer
+      : "",
+
+  answers: submissionData.answers,
+
+  feedbackRating: feedbackRating || "",
+  confusing: "",
+  whichUnclear: ""
+};
+
     
     try {
       // Send to Google Apps Script endpoint
