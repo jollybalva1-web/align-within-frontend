@@ -1524,20 +1524,18 @@ function ContactPage({ setPage }) {
   const handleContactSubmit = () => {
     // ✅ Updates requested:
     // 1) Name is required before submit
-    // 2) Order already is: Name -> Email -> Message
-    // 3) Button label changed to "Send me next"
+    // 2) Order: Name -> Email -> Message
+    // 3) Button label: "Send me next"
     if (!name.trim()) return;
     if (!contactEmail.includes("@") || !message) return;
 
     setSending(true);
 
-    // Create hidden form and submit to iframe
     const form = document.createElement("form");
     form.method = "POST";
     form.action = ENDPOINT_URL;
     form.target = "hidden_iframe";
 
-    // Add payload as a hidden field
     const payloadInput = document.createElement("input");
     payloadInput.type = "hidden";
     payloadInput.name = "payload";
@@ -1553,7 +1551,6 @@ function ContactPage({ setPage }) {
     form.submit();
     document.body.removeChild(form);
 
-    // Show success after a short delay (form submission is fire-and-forget)
     setTimeout(() => {
       setSending(false);
       setSent(true);
@@ -1562,7 +1559,6 @@ function ContactPage({ setPage }) {
 
   return (
     <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
-      {/* Hidden iframe for form submission */}
       <iframe name="hidden_iframe" ref={iframeRef} style={{ display: "none" }} />
 
       <div style={{ maxWidth: "520px", margin: "0 auto", padding: "40px 24px 80px" }}>
@@ -1691,6 +1687,184 @@ function ContactPage({ setPage }) {
 }
 
 // ═══════════════════════════════════════════════════════════
+// RESULTS PAGE — ADD NAME FIELD TO "SEND ME NEXT STEPS" BOX
+// ═══════════════════════════════════════════════════════════
+//
+// Paste/merge this into your existing ResultsPage.
+// Only the "Want help working on these patterns?" CTA block is new.
+
+function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
+  const [feedbackRating, setFeedbackRating] = useState(null);
+
+  // ✅ NEW: name + email fields for the “next steps” box
+  const [nextName, setNextName] = useState("");
+  const [nextEmail, setNextEmail] = useState("");
+  const [nextSending, setNextSending] = useState(false);
+  const [nextSent, setNextSent] = useState(false);
+  const iframeRef = useRef(null);
+
+  const handleSendNextSteps = () => {
+    if (!nextName.trim()) return;
+    if (!nextEmail.includes("@")) return;
+
+    setNextSending(true);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = endpointUrl;
+    form.target = "hidden_iframe";
+
+    const payloadInput = document.createElement("input");
+    payloadInput.type = "hidden";
+    payloadInput.name = "payload";
+
+    // ✅ IMPORTANT: send scores from the website so email matches website exactly
+    payloadInput.value = JSON.stringify({
+      type: "assessment",
+      name: nextName.trim(),
+      email: nextEmail.trim(),
+
+      context: submissionData?.context || "",
+      vignetteAnswer: submissionData?.vignetteAnswer || "",
+      vignetteCorrect: !!submissionData?.vignetteCorrect,
+      answers: submissionData?.answers || [],
+      scores: submissionData?.scores || scores,
+
+      // optional tag for debugging/analytics
+      source: "results_next_steps",
+      feedbackRating: feedbackRating || "",
+    });
+
+    form.appendChild(payloadInput);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    setTimeout(() => {
+      setNextSending(false);
+      setNextSent(true);
+    }, 1200);
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
+      <iframe name="hidden_iframe" ref={iframeRef} style={{ display: "none" }} />
+
+      <div style={{ maxWidth: "920px", margin: "0 auto", padding: "24px 24px 80px" }}>
+        {/* ... keep your existing results UI above ... */}
+
+        {/* Example: your existing feedback rating section would set feedbackRating */}
+        {/* (You already have this in your UI; keep yours) */}
+
+        {/* ✅ UPDATED CTA: Name + Email + button */}
+        <div
+          className="card"
+          style={{
+            marginTop: "28px",
+            padding: "32px 24px",
+            border: `1px solid ${COLORS.softBorder || "#e8d8b8"}`,
+            borderRadius: "18px",
+            textAlign: "center",
+            background: COLORS.cream,
+          }}
+        >
+          <h2
+            style={{
+              fontFamily: FONTS.display,
+              fontSize: "26px",
+              fontWeight: 600,
+              color: COLORS.charcoal,
+              marginBottom: "10px",
+            }}
+          >
+            Want help working on these patterns?
+          </h2>
+
+          <p
+            style={{
+              fontFamily: FONTS.body,
+              fontSize: "15px",
+              color: COLORS.warmGray,
+              marginBottom: "18px",
+              maxWidth: "640px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              lineHeight: 1.5,
+            }}
+          >
+            I'm running small guided batches where I help you apply specific tools to your top focus areas.
+            Enter your name + email and I'll send you your personalized next steps.
+          </p>
+
+          {!nextSent ? (
+            <>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                }}
+              >
+                <input
+                  type="text"
+                  value={nextName}
+                  onChange={(e) => setNextName(e.target.value)}
+                  placeholder="Your name"
+                  style={{ minWidth: "220px" }}
+                />
+
+                <input
+                  type="email"
+                  value={nextEmail}
+                  onChange={(e) => setNextEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  style={{ minWidth: "240px" }}
+                />
+
+                <button
+                  className="btn-primary"
+                  onClick={handleSendNextSteps}
+                  disabled={!nextName.trim() || !nextEmail.includes("@") || nextSending}
+                >
+                  {nextSending ? "Sending..." : "Send me next steps"}
+                </button>
+              </div>
+
+              <div
+                style={{
+                  marginTop: "10px",
+                  fontFamily: FONTS.body,
+                  fontSize: "13px",
+                  color: COLORS.warmGray,
+                }}
+              >
+                I'll email you a personalized profile with tools matched to your results.
+              </div>
+            </>
+          ) : (
+            <div style={{ fontFamily: FONTS.body, color: COLORS.charcoal, marginTop: "10px" }}>
+              ✓ Sent. Check your inbox.
+            </div>
+          )}
+        </div>
+
+        <button
+          className="btn-secondary"
+          onClick={() => setPage("landing")}
+          style={{ marginTop: "24px" }}
+        >
+          Back to Home
+        </button>
+      </div>
+
+      <Footer setPage={setPage} />
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════════════════
 
@@ -1702,12 +1876,10 @@ export default function AlignWithin() {
   const [answers, setAnswers] = useState(null);
   const [scores, setScores] = useState(null);
 
-  // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
-  // Compute scores when answers are set
   useEffect(() => {
     if (answers) {
       const computed = computeScores(answers, vignetteCorrect);
@@ -1716,13 +1888,9 @@ export default function AlignWithin() {
   }, [answers, vignetteCorrect]);
 
   const pageSetterWithReset = useCallback((newPage) => {
-    if (newPage === "landing") {
-      // Don't reset state on landing — user might want to navigate back
-    }
     setPage(newPage);
   }, []);
 
-  // Bundle all data needed for submission
   const submissionData = {
     context: anchor,
     vignetteAnswer: vignetteAnswer,
