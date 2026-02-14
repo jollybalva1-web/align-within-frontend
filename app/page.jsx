@@ -1062,60 +1062,58 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
   const strengths = allConstructs.filter((c) => scores[c].level === "Strong").slice(0, 3);
   const needsWork = allConstructs.filter((c) => scores[c].level === "Needs Attention").slice(0, 3);
 
-  const handleSubmit = async () => {
+  // UPDATED: Uses hidden form submission to bypass CORS
+  const handleSubmit = () => {
     if (!email.includes("@")) return;
     
     setSubmitting(true);
     
-    // Prepare data for Google Sheet
-const payload = {
-  type: "assessment",
-
-  name: "Anonymous",              // You don't collect name yet
-  email: email,
-
-  ageConfirmed: "Yes",            // Since they passed age gate
-  context: submissionData.context,
-
-  careerVignette:
-    submissionData.context === "career"
-      ? submissionData.vignetteAnswer
-      : "",
-
-  relationshipVignette:
-    submissionData.context === "relationships"
-      ? submissionData.vignetteAnswer
-      : "",
-
-  answers: submissionData.answers,
-
-  feedbackRating: feedbackRating || "",
-  confusing: "",
-  whichUnclear: ""
-};
-
+    // Prepare payload
+    const payload = {
+      type: "assessment",
+      name: "Anonymous",
+      email: email,
+      ageConfirmed: "Yes",
+      context: submissionData.context,
+      careerVignette: submissionData.context === "career" ? submissionData.vignetteAnswer : "",
+      relationshipVignette: submissionData.context === "relationships" ? submissionData.vignetteAnswer : "",
+      answers: submissionData.answers,
+      feedbackRating: feedbackRating || "",
+      confusing: "",
+      whichUnclear: ""
+    };
     
-    try {
-      // Send to Google Apps Script endpoint
-      if (endpointUrl && endpointUrl !== "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
-        await fetch(endpointUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      }
-      setSubmitted(true);
-    } catch (error) {
-      console.error("Submission error:", error);
-      // Still mark as submitted for UX — data can be recovered from their email reply
-      setSubmitted(true);
-    }
+    // Use hidden form submission (bypasses CORS)
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = endpointUrl;
+    form.target = 'results_iframe';
     
-    setSubmitting(false);
+    const payloadInput = document.createElement('input');
+    payloadInput.type = 'hidden';
+    payloadInput.name = 'payload';
+    payloadInput.value = JSON.stringify(payload);
+    form.appendChild(payloadInput);
+    
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+    
+    // Show success after delay
+    setTimeout(() => {
+      setSubmitting(false);
+      setSubmitted(true);
+    }, 2000);
   };
 
   return (
     <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px", paddingBottom: "0" }}>
+      {/* Hidden iframe for form submission - ADDED FOR CORS FIX */}
+      <iframe 
+        name="results_iframe" 
+        style={{ display: 'none' }} 
+      />
+      
       <div style={{ maxWidth: "680px", margin: "0 auto", padding: "20px 24px 60px" }}>
 
         {/* Header */}
@@ -1372,6 +1370,7 @@ const payload = {
     </div>
   );
 }
+
 
 // ── PRIVACY POLICY ──
 function PrivacyPage({ setPage }) {
