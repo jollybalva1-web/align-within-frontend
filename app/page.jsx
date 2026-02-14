@@ -1522,32 +1522,37 @@ function ContactPage({ setPage }) {
   const iframeRef = useRef(null);
 
   const handleContactSubmit = () => {
+    // ✅ Updates requested:
+    // 1) Name is required before submit
+    // 2) Order already is: Name -> Email -> Message
+    // 3) Button label changed to "Send me next"
+    if (!name.trim()) return;
     if (!contactEmail.includes("@") || !message) return;
-    
+
     setSending(true);
-    
+
     // Create hidden form and submit to iframe
-    const form = document.createElement('form');
-    form.method = 'POST';
+    const form = document.createElement("form");
+    form.method = "POST";
     form.action = ENDPOINT_URL;
-    form.target = 'hidden_iframe';
-    
+    form.target = "hidden_iframe";
+
     // Add payload as a hidden field
-    const payloadInput = document.createElement('input');
-    payloadInput.type = 'hidden';
-    payloadInput.name = 'payload';
+    const payloadInput = document.createElement("input");
+    payloadInput.type = "hidden";
+    payloadInput.name = "payload";
     payloadInput.value = JSON.stringify({
       type: "contact",
-      name: name,
-      email: contactEmail,
+      name: name.trim(),
+      email: contactEmail.trim(),
       message: message,
     });
     form.appendChild(payloadInput);
-    
+
     document.body.appendChild(form);
     form.submit();
     document.body.removeChild(form);
-    
+
     // Show success after a short delay (form submission is fire-and-forget)
     setTimeout(() => {
       setSending(false);
@@ -1558,42 +1563,44 @@ function ContactPage({ setPage }) {
   return (
     <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
       {/* Hidden iframe for form submission */}
-      <iframe 
-        name="hidden_iframe" 
-        ref={iframeRef}
-        style={{ display: 'none' }} 
-      />
-      
+      <iframe name="hidden_iframe" ref={iframeRef} style={{ display: "none" }} />
+
       <div style={{ maxWidth: "520px", margin: "0 auto", padding: "40px 24px 80px" }}>
-        <h1 style={{
-          fontFamily: FONTS.display,
-          fontSize: "32px",
-          fontWeight: 600,
-          color: COLORS.charcoal,
-          marginBottom: "8px",
-        }}>
+        <h1
+          style={{
+            fontFamily: FONTS.display,
+            fontSize: "32px",
+            fontWeight: 600,
+            color: COLORS.charcoal,
+            marginBottom: "8px",
+          }}
+        >
           Contact Us
         </h1>
 
-        <p style={{
-          fontFamily: FONTS.body,
-          fontSize: "16px",
-          color: COLORS.warmGray,
-          marginBottom: "32px",
-        }}>
+        <p
+          style={{
+            fontFamily: FONTS.body,
+            fontSize: "16px",
+            color: COLORS.warmGray,
+            marginBottom: "32px",
+          }}
+        >
           Questions, feedback, or data deletion requests — we're here.
         </p>
 
         {!sent ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div>
-              <label style={{
-                fontSize: "14px",
-                fontWeight: 500,
-                color: COLORS.charcoal,
-                marginBottom: "6px",
-                display: "block",
-              }}>
+              <label
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: COLORS.charcoal,
+                  marginBottom: "6px",
+                  display: "block",
+                }}
+              >
                 Name
               </label>
               <input
@@ -1605,13 +1612,15 @@ function ContactPage({ setPage }) {
             </div>
 
             <div>
-              <label style={{
-                fontSize: "14px",
-                fontWeight: 500,
-                color: COLORS.charcoal,
-                marginBottom: "6px",
-                display: "block",
-              }}>
+              <label
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: COLORS.charcoal,
+                  marginBottom: "6px",
+                  display: "block",
+                }}
+              >
                 Email
               </label>
               <input
@@ -1623,13 +1632,15 @@ function ContactPage({ setPage }) {
             </div>
 
             <div>
-              <label style={{
-                fontSize: "14px",
-                fontWeight: 500,
-                color: COLORS.charcoal,
-                marginBottom: "6px",
-                display: "block",
-              }}>
+              <label
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: COLORS.charcoal,
+                  marginBottom: "6px",
+                  display: "block",
+                }}
+              >
                 Message
               </label>
               <textarea
@@ -1644,20 +1655,22 @@ function ContactPage({ setPage }) {
             <button
               className="btn-primary"
               onClick={handleContactSubmit}
-              disabled={!contactEmail.includes("@") || !message || sending}
+              disabled={!name.trim() || !contactEmail.includes("@") || !message || sending}
               style={{ marginTop: "8px" }}
             >
-              {sending ? "Sending..." : "Send Message"}
+              {sending ? "Sending..." : "Send me next"}
             </button>
           </div>
         ) : (
           <div className="card" style={{ textAlign: "center", padding: "40px" }}>
             <div style={{ fontSize: "32px", marginBottom: "12px" }}>✓</div>
-            <p style={{
-              fontFamily: FONTS.body,
-              fontSize: "16px",
-              color: COLORS.charcoal,
-            }}>
+            <p
+              style={{
+                fontFamily: FONTS.body,
+                fontSize: "16px",
+                color: COLORS.charcoal,
+              }}
+            >
               Message sent. We'll get back to you soon.
             </p>
           </div>
@@ -1677,11 +1690,9 @@ function ContactPage({ setPage }) {
   );
 }
 
-
 // ═══════════════════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════════════════
-
 
 export default function AlignWithin() {
   const [page, setPage] = useState("landing");
@@ -1728,13 +1739,26 @@ export default function AlignWithin() {
       {page === "landing" && <LandingPage setPage={pageSetterWithReset} />}
       {page === "age-gate" && <AgeGate setPage={pageSetterWithReset} />}
       {page === "anchor" && <AnchorPage setPage={pageSetterWithReset} setAnchor={setAnchor} />}
-      {page === "vignette" && <VignettePage anchor={anchor} setPage={pageSetterWithReset} setVignetteCorrect={setVignetteCorrect} setVignetteAnswer={setVignetteAnswer} />}
+      {page === "vignette" && (
+        <VignettePage
+          anchor={anchor}
+          setPage={pageSetterWithReset}
+          setVignetteCorrect={setVignetteCorrect}
+          setVignetteAnswer={setVignetteAnswer}
+        />
+      )}
       {page === "assessment" && <AssessmentPage setPage={pageSetterWithReset} setAnswers={setAnswers} />}
-      {page === "results" && scores && <ResultsPage scores={scores} setPage={pageSetterWithReset} submissionData={submissionData} endpointUrl={ENDPOINT_URL} />}
+      {page === "results" && scores && (
+        <ResultsPage
+          scores={scores}
+          setPage={pageSetterWithReset}
+          submissionData={submissionData}
+          endpointUrl={ENDPOINT_URL}
+        />
+      )}
       {page === "privacy" && <PrivacyPage setPage={pageSetterWithReset} />}
       {page === "terms" && <TermsPage setPage={pageSetterWithReset} />}
       {page === "contact" && <ContactPage setPage={pageSetterWithReset} />}
     </div>
   );
 }
-
