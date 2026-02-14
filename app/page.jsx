@@ -1034,6 +1034,7 @@ function AssessmentPage({ setPage, setAnswers }) {
 // ── RESULTS PAGE ──
 function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
   const [showWaitlist, setShowWaitlist] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -1062,16 +1063,19 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
   const strengths = allConstructs.filter((c) => scores[c].level === "Strong").slice(0, 3);
   const needsWork = allConstructs.filter((c) => scores[c].level === "Needs Attention").slice(0, 3);
 
-  // UPDATED: Uses hidden form submission to bypass CORS
   const handleSubmit = () => {
     if (!email.includes("@")) return;
+    if (!name.trim()) {
+      alert("Please enter your name");
+      return;
+    }
     
     setSubmitting(true);
     
-    // Prepare payload
+    // Prepare payload with ALL scores from frontend
     const payload = {
       type: "assessment",
-      name: "Anonymous",
+      name: name.trim(),
       email: email,
       ageConfirmed: "Yes",
       context: submissionData.context,
@@ -1080,7 +1084,22 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
       answers: submissionData.answers,
       feedbackRating: feedbackRating || "",
       confusing: "",
-      whichUnclear: ""
+      whichUnclear: "",
+      // Send the actual calculated scores from frontend
+      scores: {
+        overall: { score: scores.overall.score, level: scores.overall.level },
+        insight: { score: scores.insight.score, level: scores.insight.level },
+        clarity: { score: scores.clarity.score, level: scores.clarity.level },
+        learning: { score: scores.learning.score, level: scores.learning.level },
+        boundaries: { score: scores.boundaries.score, level: scores.boundaries.level },
+        reactivity: { score: scores.reactivity.score, level: scores.reactivity.level },
+        overthinking: { score: scores.overthinking.score, level: scores.overthinking.level },
+        impulsivity: { score: scores.impulsivity.score, level: scores.impulsivity.level },
+        avoidance: { score: scores.avoidance.score, level: scores.avoidance.level },
+        radar: { score: scores.radar.score, level: scores.radar.level },
+        interpretation: { score: scores.interpretation.score, level: scores.interpretation.level },
+        intent_impact: { score: scores.intent_impact.score, level: scores.intent_impact.level },
+      }
     };
     
     // Use hidden form submission (bypasses CORS)
@@ -1108,7 +1127,7 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
 
   return (
     <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px", paddingBottom: "0" }}>
-      {/* Hidden iframe for form submission - ADDED FOR CORS FIX */}
+      {/* Hidden iframe for form submission */}
       <iframe 
         name="results_iframe" 
         style={{ display: 'none' }} 
@@ -1308,7 +1327,7 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
           </div>
         </div>
 
-        {/* Next Steps CTA */}
+        {/* Next Steps CTA - WITH NAME FIELD */}
         <div style={{ marginTop: "32px" }}>
           <div className="card" style={{
             padding: "32px", textAlign: "center",
@@ -1318,40 +1337,63 @@ function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
             <h3 style={{
               fontFamily: FONTS.display, fontSize: "22px", fontWeight: 600,
               color: COLORS.charcoal, marginBottom: "8px",
-            }}>Want help working on these patterns?</h3>
+            }}>Get your results via email</h3>
             <p style={{
               fontFamily: FONTS.body, fontSize: "15px", color: COLORS.charcoalLight,
               marginBottom: "24px", lineHeight: 1.6,
             }}>
-              I'm running small guided batches where I help you apply specific tools to your top focus areas. Enter your email and I'll send you your personalized next steps.
+              Enter your details below and we'll send you a copy of your complete results to keep.
             </p>
             {!submitted ? (
               <div>
-                <div style={{ display: "flex", gap: "8px", maxWidth: "400px", margin: "0 auto" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxWidth: "400px", margin: "0 auto" }}>
+                  {/* Name Input */}
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    style={{ 
+                      width: "100%",
+                      padding: "12px 16px",
+                      fontSize: "15px",
+                      border: `1.5px solid ${COLORS.warmGraySubtle}`,
+                      borderRadius: "8px",
+                      outline: "none",
+                    }}
+                  />
+                  {/* Email Input */}
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"
-                    style={{ flex: 1 }}
+                    style={{ 
+                      width: "100%",
+                      padding: "12px 16px",
+                      fontSize: "15px",
+                      border: `1.5px solid ${COLORS.warmGraySubtle}`,
+                      borderRadius: "8px",
+                      outline: "none",
+                    }}
                   />
                   <button 
                     className="btn-primary" 
                     onClick={handleSubmit} 
-                    disabled={!email.includes("@") || submitting} 
-                    style={{ whiteSpace: "nowrap" }}
+                    disabled={!email.includes("@") || !name.trim() || submitting} 
+                    style={{ width: "100%" }}
                   >
-                    {submitting ? "Sending..." : "Send me next steps"}
+                    {submitting ? "Sending..." : "Send me my results"}
                   </button>
                 </div>
                 <p style={{ marginTop: "10px", fontSize: "12px", color: COLORS.warmGrayLight }}>
-                  I'll email you a personalized profile with tools matched to your results.
+                  We'll email you a copy of your complete Clarity Map.
                 </p>
               </div>
             ) : (
               <div style={{ padding: "16px", background: COLORS.goldSubtle, borderRadius: "8px" }}>
                 <p style={{ fontFamily: FONTS.body, fontSize: "15px", color: COLORS.earth, fontWeight: 600 }}>
-                  ✓ Got it! Check your inbox — I'll send your personalized next steps soon.
+                  ✓ Got it! Check your inbox — your results are on the way.
                 </p>
               </div>
             )}
@@ -1512,361 +1554,176 @@ function TermsPage({ setPage }) {
   );
 }
 
-// ── CONTACT PAGE ──
-function ContactPage({ setPage }) {
-  const [sent, setSent] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [name, setName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const iframeRef = useRef(null);
+  // ── CONTACT PAGE ──
+  function ContactPage({ setPage }) {
+    const [sent, setSent] = useState(false);
+    const [sending, setSending] = useState(false);
+    const [name, setName] = useState("");
+    const [contactEmail, setContactEmail] = useState("");
+    const [message, setMessage] = useState("");
+    const iframeRef = useRef(null);
 
-  const handleContactSubmit = () => {
-    // ✅ Updates requested:
-    // 1) Name is required before submit
-    // 2) Order: Name -> Email -> Message
-    // 3) Button label: "Send me next"
-    if (!name.trim()) return;
-    if (!contactEmail.includes("@") || !message) return;
+    const handleContactSubmit = () => {
+      if (!contactEmail.includes("@") || !message) return;
+      
+      setSending(true);
+      
+      // Create hidden form and submit to iframe
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = ENDPOINT_URL;
+      form.target = 'hidden_iframe';
+      
+      // Add payload as a hidden field
+      const payloadInput = document.createElement('input');
+      payloadInput.type = 'hidden';
+      payloadInput.name = 'payload';
+      payloadInput.value = JSON.stringify({
+        type: "contact",
+        name: name,
+        email: contactEmail,
+        message: message,
+      });
+      form.appendChild(payloadInput);
+      
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+      
+      // Show success after a short delay (form submission is fire-and-forget)
+      setTimeout(() => {
+        setSending(false);
+        setSent(true);
+      }, 1500);
+    };
 
-    setSending(true);
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = ENDPOINT_URL;
-    form.target = "hidden_iframe";
-
-    const payloadInput = document.createElement("input");
-    payloadInput.type = "hidden";
-    payloadInput.name = "payload";
-    payloadInput.value = JSON.stringify({
-      type: "contact",
-      name: name.trim(),
-      email: contactEmail.trim(),
-      message: message,
-    });
-    form.appendChild(payloadInput);
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
-    setTimeout(() => {
-      setSending(false);
-      setSent(true);
-    }, 1500);
-  };
-
-  return (
-    <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
-      <iframe name="hidden_iframe" ref={iframeRef} style={{ display: "none" }} />
-
-      <div style={{ maxWidth: "520px", margin: "0 auto", padding: "40px 24px 80px" }}>
-        <h1
-          style={{
+    return (
+      <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
+        {/* Hidden iframe for form submission */}
+        <iframe 
+          name="hidden_iframe" 
+          ref={iframeRef}
+          style={{ display: 'none' }} 
+        />
+        
+        <div style={{ maxWidth: "520px", margin: "0 auto", padding: "40px 24px 80px" }}>
+          <h1 style={{
             fontFamily: FONTS.display,
             fontSize: "32px",
             fontWeight: 600,
             color: COLORS.charcoal,
             marginBottom: "8px",
-          }}
-        >
-          Contact Us
-        </h1>
+          }}>
+            Contact Us
+          </h1>
 
-        <p
-          style={{
+          <p style={{
             fontFamily: FONTS.body,
             fontSize: "16px",
             color: COLORS.warmGray,
             marginBottom: "32px",
-          }}
-        >
-          Questions, feedback, or data deletion requests — we're here.
-        </p>
+          }}>
+            Questions, feedback, or data deletion requests — we're here.
+          </p>
 
-        {!sent ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <div>
-              <label
-                style={{
+          {!sent ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div>
+                <label style={{
                   fontSize: "14px",
                   fontWeight: 500,
                   color: COLORS.charcoal,
                   marginBottom: "6px",
                   display: "block",
-                }}
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-              />
-            </div>
+                }}>
+                  Name
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your name"
+                />
+              </div>
 
-            <div>
-              <label
-                style={{
+              <div>
+                <label style={{
                   fontSize: "14px",
                   fontWeight: 500,
                   color: COLORS.charcoal,
                   marginBottom: "6px",
                   display: "block",
-                }}
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                placeholder="your@email.com"
-              />
-            </div>
+                }}>
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="your@email.com"
+                />
+              </div>
 
-            <div>
-              <label
-                style={{
+              <div>
+                <label style={{
                   fontSize: "14px",
                   fontWeight: 500,
                   color: COLORS.charcoal,
                   marginBottom: "6px",
                   display: "block",
-                }}
-              >
-                Message
-              </label>
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={5}
-                placeholder="How can we help?"
-                style={{ resize: "vertical" }}
-              />
-            </div>
+                }}>
+                  Message
+                </label>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={5}
+                  placeholder="How can we help?"
+                  style={{ resize: "vertical" }}
+                />
+              </div>
 
-            <button
-              className="btn-primary"
-              onClick={handleContactSubmit}
-              disabled={!name.trim() || !contactEmail.includes("@") || !message || sending}
-              style={{ marginTop: "8px" }}
-            >
-              {sending ? "Sending..." : "Send me next"}
-            </button>
-          </div>
-        ) : (
-          <div className="card" style={{ textAlign: "center", padding: "40px" }}>
-            <div style={{ fontSize: "32px", marginBottom: "12px" }}>✓</div>
-            <p
-              style={{
+              <button
+                className="btn-primary"
+                onClick={handleContactSubmit}
+                disabled={!contactEmail.includes("@") || !message || sending}
+                style={{ marginTop: "8px" }}
+              >
+                {sending ? "Sending..." : "Send Message"}
+              </button>
+            </div>
+          ) : (
+            <div className="card" style={{ textAlign: "center", padding: "40px" }}>
+              <div style={{ fontSize: "32px", marginBottom: "12px" }}>✓</div>
+              <p style={{
                 fontFamily: FONTS.body,
                 fontSize: "16px",
                 color: COLORS.charcoal,
-              }}
-            >
-              Message sent. We'll get back to you soon.
-            </p>
-          </div>
-        )}
-
-        <button
-          className="btn-secondary"
-          onClick={() => setPage("landing")}
-          style={{ marginTop: "24px" }}
-        >
-          ← Back to Home
-        </button>
-      </div>
-
-      <Footer setPage={setPage} />
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════
-// RESULTS PAGE — ADD NAME FIELD TO "SEND ME NEXT STEPS" BOX
-// ═══════════════════════════════════════════════════════════
-//
-// Paste/merge this into your existing ResultsPage.
-// Only the "Want help working on these patterns?" CTA block is new.
-
-function ResultsPage({ scores, setPage, submissionData, endpointUrl }) {
-  const [feedbackRating, setFeedbackRating] = useState(null);
-
-  // ✅ NEW: name + email fields for the “next steps” box
-  const [nextName, setNextName] = useState("");
-  const [nextEmail, setNextEmail] = useState("");
-  const [nextSending, setNextSending] = useState(false);
-  const [nextSent, setNextSent] = useState(false);
-  const iframeRef = useRef(null);
-
-  const handleSendNextSteps = () => {
-    if (!nextName.trim()) return;
-    if (!nextEmail.includes("@")) return;
-
-    setNextSending(true);
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = endpointUrl;
-    form.target = "hidden_iframe";
-
-    const payloadInput = document.createElement("input");
-    payloadInput.type = "hidden";
-    payloadInput.name = "payload";
-
-    // ✅ IMPORTANT: send scores from the website so email matches website exactly
-    payloadInput.value = JSON.stringify({
-      type: "assessment",
-      name: nextName.trim(),
-      email: nextEmail.trim(),
-
-      context: submissionData?.context || "",
-      vignetteAnswer: submissionData?.vignetteAnswer || "",
-      vignetteCorrect: !!submissionData?.vignetteCorrect,
-      answers: submissionData?.answers || [],
-      scores: submissionData?.scores || scores,
-
-      // optional tag for debugging/analytics
-      source: "results_next_steps",
-      feedbackRating: feedbackRating || "",
-    });
-
-    form.appendChild(payloadInput);
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
-    setTimeout(() => {
-      setNextSending(false);
-      setNextSent(true);
-    }, 1200);
-  };
-
-  return (
-    <div style={{ minHeight: "100vh", background: COLORS.cream, paddingTop: "80px" }}>
-      <iframe name="hidden_iframe" ref={iframeRef} style={{ display: "none" }} />
-
-      <div style={{ maxWidth: "920px", margin: "0 auto", padding: "24px 24px 80px" }}>
-        {/* ... keep your existing results UI above ... */}
-
-        {/* Example: your existing feedback rating section would set feedbackRating */}
-        {/* (You already have this in your UI; keep yours) */}
-
-        {/* ✅ UPDATED CTA: Name + Email + button */}
-        <div
-          className="card"
-          style={{
-            marginTop: "28px",
-            padding: "32px 24px",
-            border: `1px solid ${COLORS.softBorder || "#e8d8b8"}`,
-            borderRadius: "18px",
-            textAlign: "center",
-            background: COLORS.cream,
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: FONTS.display,
-              fontSize: "26px",
-              fontWeight: 600,
-              color: COLORS.charcoal,
-              marginBottom: "10px",
-            }}
-          >
-            Want help working on these patterns?
-          </h2>
-
-          <p
-            style={{
-              fontFamily: FONTS.body,
-              fontSize: "15px",
-              color: COLORS.warmGray,
-              marginBottom: "18px",
-              maxWidth: "640px",
-              marginLeft: "auto",
-              marginRight: "auto",
-              lineHeight: 1.5,
-            }}
-          >
-            I'm running small guided batches where I help you apply specific tools to your top focus areas.
-            Enter your name + email and I'll send you your personalized next steps.
-          </p>
-
-          {!nextSent ? (
-            <>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  justifyContent: "center",
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                }}
-              >
-                <input
-                  type="text"
-                  value={nextName}
-                  onChange={(e) => setNextName(e.target.value)}
-                  placeholder="Your name"
-                  style={{ minWidth: "220px" }}
-                />
-
-                <input
-                  type="email"
-                  value={nextEmail}
-                  onChange={(e) => setNextEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  style={{ minWidth: "240px" }}
-                />
-
-                <button
-                  className="btn-primary"
-                  onClick={handleSendNextSteps}
-                  disabled={!nextName.trim() || !nextEmail.includes("@") || nextSending}
-                >
-                  {nextSending ? "Sending..." : "Send me next steps"}
-                </button>
-              </div>
-
-              <div
-                style={{
-                  marginTop: "10px",
-                  fontFamily: FONTS.body,
-                  fontSize: "13px",
-                  color: COLORS.warmGray,
-                }}
-              >
-                I'll email you a personalized profile with tools matched to your results.
-              </div>
-            </>
-          ) : (
-            <div style={{ fontFamily: FONTS.body, color: COLORS.charcoal, marginTop: "10px" }}>
-              ✓ Sent. Check your inbox.
+              }}>
+                Message sent. We'll get back to you soon.
+              </p>
             </div>
           )}
+
+          <button
+            className="btn-secondary"
+            onClick={() => setPage("landing")}
+            style={{ marginTop: "24px" }}
+          >
+            ← Back to Home
+          </button>
         </div>
 
-        <button
-          className="btn-secondary"
-          onClick={() => setPage("landing")}
-          style={{ marginTop: "24px" }}
-        >
-          Back to Home
-        </button>
+        <Footer setPage={setPage} />
       </div>
+    );
+  }
 
-      <Footer setPage={setPage} />
-    </div>
-  );
-}
 
 // ═══════════════════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════════════════
+
 
 export default function AlignWithin() {
   const [page, setPage] = useState("landing");
@@ -1876,10 +1733,12 @@ export default function AlignWithin() {
   const [answers, setAnswers] = useState(null);
   const [scores, setScores] = useState(null);
 
+  // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
+  // Compute scores when answers are set
   useEffect(() => {
     if (answers) {
       const computed = computeScores(answers, vignetteCorrect);
@@ -1888,9 +1747,13 @@ export default function AlignWithin() {
   }, [answers, vignetteCorrect]);
 
   const pageSetterWithReset = useCallback((newPage) => {
+    if (newPage === "landing") {
+      // Don't reset state on landing — user might want to navigate back
+    }
     setPage(newPage);
   }, []);
 
+  // Bundle all data needed for submission
   const submissionData = {
     context: anchor,
     vignetteAnswer: vignetteAnswer,
@@ -1907,26 +1770,13 @@ export default function AlignWithin() {
       {page === "landing" && <LandingPage setPage={pageSetterWithReset} />}
       {page === "age-gate" && <AgeGate setPage={pageSetterWithReset} />}
       {page === "anchor" && <AnchorPage setPage={pageSetterWithReset} setAnchor={setAnchor} />}
-      {page === "vignette" && (
-        <VignettePage
-          anchor={anchor}
-          setPage={pageSetterWithReset}
-          setVignetteCorrect={setVignetteCorrect}
-          setVignetteAnswer={setVignetteAnswer}
-        />
-      )}
+      {page === "vignette" && <VignettePage anchor={anchor} setPage={pageSetterWithReset} setVignetteCorrect={setVignetteCorrect} setVignetteAnswer={setVignetteAnswer} />}
       {page === "assessment" && <AssessmentPage setPage={pageSetterWithReset} setAnswers={setAnswers} />}
-      {page === "results" && scores && (
-        <ResultsPage
-          scores={scores}
-          setPage={pageSetterWithReset}
-          submissionData={submissionData}
-          endpointUrl={ENDPOINT_URL}
-        />
-      )}
+      {page === "results" && scores && <ResultsPage scores={scores} setPage={pageSetterWithReset} submissionData={submissionData} endpointUrl={ENDPOINT_URL} />}
       {page === "privacy" && <PrivacyPage setPage={pageSetterWithReset} />}
       {page === "terms" && <TermsPage setPage={pageSetterWithReset} />}
       {page === "contact" && <ContactPage setPage={pageSetterWithReset} />}
     </div>
   );
 }
+
