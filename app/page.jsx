@@ -581,11 +581,18 @@ function Footer({ setPage }) {
   );
 }
 
-// ── LANDING PAGE ──
+// ══════════════════════════════════════════════════════════════════════════════
+// UPDATED LANDING PAGE — Full Product Explanation
+// Replace the existing LandingPage function in align-within.jsx with this
+// ══════════════════════════════════════════════════════════════════════════════
+
 function LandingPage({ setPage }) {
   return (
     <div style={{ minHeight: "100vh", background: COLORS.cream }}>
-      {/* Hero */}
+      
+      {/* ═══════════════════════════════════════════════════════════════════════
+          HERO SECTION
+          ═══════════════════════════════════════════════════════════════════════ */}
       <section style={{
         minHeight: "90vh", display: "flex", flexDirection: "column",
         justifyContent: "center", alignItems: "center", textAlign: "center",
@@ -643,89 +650,504 @@ function LandingPage({ setPage }) {
         </div>
       </section>
 
-      {/* What You'll Learn */}
+      {/* ═══════════════════════════════════════════════════════════════════════
+          WHAT THIS IS — THE CORE PROBLEM
+          ═══════════════════════════════════════════════════════════════════════ */}
       <section style={{
-        padding: "80px 24px", background: COLORS.warmWhite,
+        padding: "80px 24px", 
+        background: COLORS.warmWhite,
+        borderTop: `1px solid ${COLORS.warmGraySubtle}`,
+      }}>
+        <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+          <h2 style={{
+            fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600,
+            color: COLORS.charcoal, textAlign: "center", marginBottom: "24px",
+          }}>
+            Something keeps getting in the way
+          </h2>
+          
+          <div style={{
+            fontFamily: FONTS.body, fontSize: "17px", lineHeight: 1.8,
+            color: COLORS.charcoalLight,
+          }}>
+            <p style={{ marginBottom: "20px" }}>
+              Maybe you already see the pattern. You say yes when you mean no — and end up overcommitted, resentful, with no time for what matters. You overthink until the deadline decides — and miss the opportunity you wanted. You avoid the hard conversation — and watch the relationship slowly erode.
+            </p>
+            <p style={{ marginBottom: "20px" }}>
+              Or maybe you just feel the effects without knowing the cause. The same situations keep finding you. Relationships hit the same wall. Opportunities slip away for reasons you can't name. Something's off, but you can't see what.
+            </p>
+            <p style={{ marginBottom: "20px" }}>
+              Or maybe something happened — a loss, a change, a rupture — and the person you were before doesn't quite fit anymore. You're not stuck in a loop. You're trying to find solid ground.
+            </p>
+            <p style={{ marginBottom: "20px" }}>
+              Wherever you are, you're stuck — and willpower alone hasn't been enough.
+            </p>
+            <p style={{ marginBottom: "0" }}>
+              That's because <strong style={{ color: COLORS.charcoal }}>you can't change what you can't see clearly</strong>. And even when you can see it, seeing and acting are different skills. What's missing is the ability to think clearly in the moments that matter — so you can respond from choice instead of habit.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          WHAT ALIGN WITHIN IS
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section style={{
+        padding: "80px 24px", 
+        background: COLORS.cream,
+      }}>
+        <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+          <div style={{
+            fontFamily: FONTS.body, fontSize: "13px", fontWeight: 600,
+            color: COLORS.gold, letterSpacing: "0.12em", textTransform: "uppercase",
+            marginBottom: "12px", textAlign: "center",
+          }}>
+            What This Is
+          </div>
+          <h2 style={{
+            fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600,
+            color: COLORS.charcoal, textAlign: "center", marginBottom: "24px",
+          }}>
+            Clear thinking for informed action
+          </h2>
+          
+          <div style={{
+            fontFamily: FONTS.body, fontSize: "17px", lineHeight: 1.8,
+            color: COLORS.charcoalLight,
+          }}>
+            <p style={{ marginBottom: "20px" }}>
+              Align Within is a self-awareness tool designed to help you think more clearly — especially in the moments that matter. The 8-minute assessment maps how you process decisions, handle emotions, and read situations. The result is a picture of where your thinking gets clouded and your actions get hijacked.
+            </p>
+            <p style={{ marginBottom: "20px" }}>
+              This isn't about labeling yourself or adding more self-analysis. It's about seeing what's actually happening — so that when the moment comes, you can respond from clarity instead of reacting from habit.
+            </p>
+            <p style={{ marginBottom: "0" }}>
+              Clear thinking doesn't mean perfect thinking. It means: seeing the situation as it is, knowing what you actually want, and choosing your action — instead of being chosen by your patterns.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          WHAT YOU'LL DISCOVER — THE 9 LENSES
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section style={{
+        padding: "80px 24px", 
+        background: COLORS.warmWhite,
         borderTop: `1px solid ${COLORS.warmGraySubtle}`,
       }}>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <div style={{
+            fontFamily: FONTS.body, fontSize: "13px", fontWeight: 600,
+            color: COLORS.gold, letterSpacing: "0.12em", textTransform: "uppercase",
+            marginBottom: "12px", textAlign: "center",
+          }}>
+            What You'll Discover
+          </div>
           <h2 style={{
             fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600,
             color: COLORS.charcoal, textAlign: "center", marginBottom: "12px",
-          }}>What you'll discover</h2>
+          }}>
+            Your patterns across 9 dimensions
+          </h2>
           <p style={{
             fontFamily: FONTS.body, fontSize: "17px", color: COLORS.warmGray,
-            textAlign: "center", marginBottom: "48px", maxWidth: "500px", margin: "0 auto 48px",
+            textAlign: "center", marginBottom: "48px", maxWidth: "540px", margin: "0 auto 48px",
           }}>
-            Your results map across three pillars and nine lenses of self-awareness.
+            The assessment maps three core pillars of self-awareness and six decision-making habits.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px" }}>
+          
+          {/* Three Pillars */}
+          <div style={{ marginBottom: "40px" }}>
+            <h3 style={{
+              fontFamily: FONTS.display, fontSize: "18px", fontWeight: 600,
+              color: COLORS.charcoal, marginBottom: "16px", textAlign: "center",
+            }}>
+              The Three Pillars
+            </h3>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
+              {[
+                { title: "Insight", desc: "Can you name what drives your reactions? Do you recognize your triggers?", icon: "◐" },
+                { title: "Clarity", desc: "Is your sense of self stable, or does it shift depending on who you're with?", icon: "◑" },
+                { title: "Learning", desc: "Do you adjust after mistakes, or repeat the same patterns?", icon: "◒" },
+              ].map((item, i) => (
+                <div key={i} className="card" style={{ padding: "24px", textAlign: "center" }}>
+                  <div style={{ fontSize: "28px", color: COLORS.gold, marginBottom: "12px" }}>{item.icon}</div>
+                  <div style={{ fontFamily: FONTS.display, fontSize: "17px", fontWeight: 600, marginBottom: "8px", color: COLORS.charcoal }}>{item.title}</div>
+                  <div style={{ fontSize: "14px", color: COLORS.warmGray, lineHeight: 1.5 }}>{item.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Six Lenses */}
+          <div>
+            <h3 style={{
+              fontFamily: FONTS.display, fontSize: "18px", fontWeight: 600,
+              color: COLORS.charcoal, marginBottom: "16px", textAlign: "center",
+            }}>
+              Six Decision Habits
+            </h3>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
+              {[
+                { title: "Boundaries", desc: "Do you protect your needs, or say yes when you mean no?", icon: "◓" },
+                { title: "Reactivity", desc: "How quickly do emotions flood your thinking?", icon: "◔" },
+                { title: "Thinking Style", desc: "Do you overthink, act impulsively, or avoid deciding?", icon: "◕" },
+                { title: "Social Radar", desc: "Do you notice subtle shifts in people and dynamics?", icon: "◖" },
+                { title: "Interpretation", desc: "Do you consider multiple explanations, or jump to one?", icon: "◗" },
+                { title: "Intent vs Impact", desc: "Does what you mean match how you land?", icon: "◉" },
+              ].map((item, i) => (
+                <div key={i} className="card card-hover" style={{ padding: "20px", textAlign: "center" }}>
+                  <div style={{ fontSize: "24px", color: COLORS.gold, marginBottom: "10px" }}>{item.icon}</div>
+                  <div style={{ fontFamily: FONTS.display, fontSize: "15px", fontWeight: 600, marginBottom: "6px", color: COLORS.charcoal }}>{item.title}</div>
+                  <div style={{ fontSize: "13px", color: COLORS.warmGray, lineHeight: 1.5 }}>{item.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          HOW IT HELPS — THE JOURNEY
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section style={{
+        padding: "80px 24px", 
+        background: COLORS.cream,
+      }}>
+        <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+          <div style={{
+            fontFamily: FONTS.body, fontSize: "13px", fontWeight: 600,
+            color: COLORS.gold, letterSpacing: "0.12em", textTransform: "uppercase",
+            marginBottom: "12px", textAlign: "center",
+          }}>
+            How It Works
+          </div>
+          <h2 style={{
+            fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600,
+            color: COLORS.charcoal, textAlign: "center", marginBottom: "40px",
+          }}>
+            From clouded to clear
+          </h2>
+
+          {/* The Journey Steps */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
             {[
-              { title: "Insight", desc: "Can you name what drives your reactions?", icon: "◐" },
-              { title: "Clarity", desc: "Is your sense of self stable under pressure?", icon: "◑" },
-              { title: "Learning", desc: "Do you adjust after mistakes, or repeat them?", icon: "◒" },
-              { title: "Boundaries", desc: "Do you protect your needs or over-give?", icon: "◓" },
-              { title: "Reactivity", desc: "How quickly do emotions hijack your thinking?", icon: "◔" },
-              { title: "Thinking Style", desc: "Do you overthink, act impulsively, or avoid?", icon: "◕" },
-              { title: "Social Radar", desc: "Do you catch subtle shifts in people?", icon: "◖" },
-              { title: "Interpretation", desc: "Do you jump to conclusions or stay open?", icon: "◗" },
-              { title: "Intent vs Impact", desc: "Does what you mean match how you land?", icon: "◉" },
+              { 
+                step: "1", 
+                title: "See where thinking gets clouded", 
+                desc: "The assessment maps your patterns across 9 dimensions — showing where clarity breaks down and reactions take over.",
+              },
+              { 
+                step: "2", 
+                title: "Connect patterns to what you're facing", 
+                desc: "Link what you discover to something specific — a decision, a conversation, a situation. This makes it concrete.",
+              },
+              { 
+                step: "3", 
+                title: "Understand why the pattern exists", 
+                desc: "When you understand why you do something, it loses some of its automatic grip.",
+              },
+              { 
+                step: "4", 
+                title: "Catch the pattern in action", 
+                desc: "Awareness in the moment is different from awareness in hindsight.",
+              },
+              { 
+                step: "5", 
+                title: "Respond differently", 
+                desc: "Clear thinking is a skill. It strengthens with practice.",
+              },
             ].map((item, i) => (
-              <div key={i} className="card card-hover" style={{ padding: "24px", textAlign: "center" }}>
-                <div style={{ fontSize: "28px", color: COLORS.gold, marginBottom: "12px" }}>{item.icon}</div>
-                <div style={{ fontFamily: FONTS.display, fontSize: "17px", fontWeight: 600, marginBottom: "8px" }}>{item.title}</div>
-                <div style={{ fontSize: "14px", color: COLORS.warmGray, lineHeight: 1.5 }}>{item.desc}</div>
+              <div key={i} style={{
+                display: "flex", gap: "20px", alignItems: "flex-start",
+              }}>
+                <div style={{
+                  width: "40px", height: "40px", borderRadius: "50%",
+                  background: COLORS.goldSubtle, border: `2px solid ${COLORS.gold}`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: FONTS.display, fontSize: "18px", fontWeight: 700, color: COLORS.gold,
+                  flexShrink: 0,
+                }}>
+                  {item.step}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{
+                    fontFamily: FONTS.display, fontSize: "18px", fontWeight: 600,
+                    color: COLORS.charcoal, margin: 0, marginBottom: "6px",
+                  }}>
+                    {item.title}
+                  </h4>
+                  <p style={{
+                    fontFamily: FONTS.body, fontSize: "15px", color: COLORS.charcoalLight,
+                    lineHeight: 1.6, margin: 0,
+                  }}>
+                    {item.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Trust Section */}
-      <section style={{ padding: "64px 24px", background: COLORS.cream }}>
-        <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
+      {/* ═══════════════════════════════════════════════════════════════════════
+          WHAT THIS IS NOT — IMPORTANT DISTINCTIONS
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section style={{
+        padding: "80px 24px", 
+        background: COLORS.warmWhite,
+        borderTop: `1px solid ${COLORS.warmGraySubtle}`,
+      }}>
+        <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+          <div style={{
+            fontFamily: FONTS.body, fontSize: "13px", fontWeight: 600,
+            color: COLORS.gold, letterSpacing: "0.12em", textTransform: "uppercase",
+            marginBottom: "12px", textAlign: "center",
+          }}>
+            Important to Know
+          </div>
           <h2 style={{
-            fontFamily: FONTS.display, fontSize: "28px", fontWeight: 600,
-            color: COLORS.charcoal, marginBottom: "32px",
-          }}>Built with care</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600,
+            color: COLORS.charcoal, textAlign: "center", marginBottom: "32px",
+          }}>
+            What this is — and isn't
+          </h2>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+            {/* What it IS */}
+            <div className="card" style={{ padding: "28px", borderLeft: `4px solid ${COLORS.sage}` }}>
+              <h4 style={{
+                fontFamily: FONTS.display, fontSize: "17px", fontWeight: 600,
+                color: COLORS.sage, marginBottom: "12px",
+              }}>
+                ✓ This IS
+              </h4>
+              <ul style={{
+                fontFamily: FONTS.body, fontSize: "15px", color: COLORS.charcoalLight,
+                lineHeight: 1.7, paddingLeft: "20px", margin: 0,
+              }}>
+                <li style={{ marginBottom: "8px" }}>A <strong>self-reflection tool</strong> to help you see your patterns more clearly</li>
+                <li style={{ marginBottom: "8px" }}>A way to get <strong>language for things you've felt</strong> but couldn't name</li>
+                <li style={{ marginBottom: "8px" }}>A starting point for <strong>personal growth work</strong>, not an end point</li>
+                <li style={{ marginBottom: "0" }}>Designed to <strong>complement</strong> therapy, coaching, or self-directed growth — not replace them</li>
+              </ul>
+            </div>
+            
+            {/* What it's NOT */}
+            <div className="card" style={{ padding: "28px", borderLeft: `4px solid ${COLORS.red}` }}>
+              <h4 style={{
+                fontFamily: FONTS.display, fontSize: "17px", fontWeight: 600,
+                color: COLORS.red, marginBottom: "12px",
+              }}>
+                ✗ This is NOT
+              </h4>
+              <ul style={{
+                fontFamily: FONTS.body, fontSize: "15px", color: COLORS.charcoalLight,
+                lineHeight: 1.7, paddingLeft: "20px", margin: 0,
+              }}>
+                <li style={{ marginBottom: "8px" }}>A <strong>medical or psychological diagnosis</strong> — we don't diagnose conditions</li>
+                <li style={{ marginBottom: "8px" }}>A <strong>replacement for professional help</strong> — if you're struggling, please seek support</li>
+                <li style={{ marginBottom: "8px" }}>A <strong>personality test that puts you in a box</strong> — patterns can change</li>
+                <li style={{ marginBottom: "0" }}>A <strong>quick fix</strong> — real change takes time and practice</li>
+              </ul>
+            </div>
+          </div>
+          
+          <p style={{
+            fontFamily: FONTS.body, fontSize: "14px", color: COLORS.warmGray,
+            textAlign: "center", marginTop: "24px", lineHeight: 1.6,
+          }}>
+            If you're experiencing a mental health crisis, please reach out to a qualified professional or crisis service. This tool is for self-reflection, not crisis support.
+          </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          PRIVACY & TRUST
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section style={{
+        padding: "80px 24px", 
+        background: COLORS.cream,
+      }}>
+        <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+          <div style={{
+            fontFamily: FONTS.body, fontSize: "13px", fontWeight: 600,
+            color: COLORS.gold, letterSpacing: "0.12em", textTransform: "uppercase",
+            marginBottom: "12px", textAlign: "center",
+          }}>
+            Your Privacy
+          </div>
+          <h2 style={{
+            fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600,
+            color: COLORS.charcoal, textAlign: "center", marginBottom: "32px",
+          }}>
+            Built on trust
+          </h2>
+          
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
             {[
-              { icon: "🔒", text: "Private by default. No accounts, no tracking." },
-              { icon: "⚖️", text: "Not a diagnosis. A reflection tool." },
-              { icon: "🔞", text: "Designed for adults (18+)." },
-              { icon: "🧭", text: "Built to reduce spiraling and improve clarity." },
+              { 
+                icon: "🔒", 
+                title: "No account required",
+                desc: "Take the full assessment without signing up. Email is only collected if you choose to continue."
+              },
+              { 
+                icon: "🚫", 
+                title: "No ads or tracking",
+                desc: "We don't use tracking pixels, retargeting ads, or sell data to third parties."
+              },
+              { 
+                icon: "🔞", 
+                title: "Adults only (18+)",
+                desc: "This tool explores emotional patterns and decision-making. It's designed for adults."
+              },
             ].map((item, i) => (
               <div key={i} style={{
                 background: COLORS.warmWhite, border: `1px solid ${COLORS.warmGraySubtle}`,
-                borderRadius: "10px", padding: "20px", textAlign: "left",
+                borderRadius: "12px", padding: "24px",
               }}>
-                <div style={{ fontSize: "20px", marginBottom: "8px" }}>{item.icon}</div>
-                <div style={{ fontSize: "14px", color: COLORS.charcoalLight, lineHeight: 1.5 }}>{item.text}</div>
+                <div style={{ fontSize: "24px", marginBottom: "12px" }}>{item.icon}</div>
+                <h4 style={{
+                  fontFamily: FONTS.display, fontSize: "16px", fontWeight: 600,
+                  color: COLORS.charcoal, marginBottom: "8px",
+                }}>
+                  {item.title}
+                </h4>
+                <p style={{
+                  fontFamily: FONTS.body, fontSize: "14px", color: COLORS.charcoalLight,
+                  lineHeight: 1.6, margin: 0,
+                }}>
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          
+          <div style={{ textAlign: "center", marginTop: "32px" }}>
+            <span 
+              onClick={() => setPage("privacy")} 
+              style={{ 
+                fontFamily: FONTS.body, fontSize: "14px", color: COLORS.earth, 
+                cursor: "pointer", textDecoration: "underline", textUnderlineOffset: "3px",
+              }}
+            >
+              Read our full Privacy Policy
+            </span>
+            <span style={{ color: COLORS.warmGrayLight, margin: "0 12px" }}>·</span>
+            <span 
+              onClick={() => setPage("terms")} 
+              style={{ 
+                fontFamily: FONTS.body, fontSize: "14px", color: COLORS.earth, 
+                cursor: "pointer", textDecoration: "underline", textUnderlineOffset: "3px",
+              }}
+            >
+              Terms of Use
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          FAQ — COMMON QUESTIONS
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section style={{
+        padding: "80px 24px", 
+        background: COLORS.warmWhite,
+        borderTop: `1px solid ${COLORS.warmGraySubtle}`,
+      }}>
+        <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+          <h2 style={{
+            fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600,
+            color: COLORS.charcoal, textAlign: "center", marginBottom: "40px",
+          }}>
+            Common questions
+          </h2>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+            {[
+              {
+                q: "How is this different from other personality tests?",
+                a: "Most personality tests put you in a fixed category. This assessment maps tendencies that can shift with awareness and practice. It's not about who you are — it's about patterns you can work with."
+              },
+              {
+                q: "What if I don't like my results?",
+                a: "Results aren't judgments. 'Needs Attention' doesn't mean broken — it means this is where clarity tends to break down. The goal is to see clearly, not to score well."
+              },
+              {
+                q: "How accurate is this?",
+                a: "The assessment reflects how you see yourself based on your responses. We include a feedback question at the end so you can tell us if it resonated. Take what fits, leave what doesn't."
+              },
+              {
+                q: "Do I have to share my email?",
+                a: "No. You can take the full assessment and see your results without sharing anything. Email is only needed if you want to continue with the guided pathway."
+              },
+              {
+                q: "Can this help with [specific issue]?",
+                a: "This tool helps with self-awareness around decisions, emotions, and relationships. It's not designed for clinical issues like depression, anxiety disorders, or trauma — for those, please seek professional support."
+              },
+              {
+                q: "What happens after I see my results?",
+                a: "You'll have the option to connect your patterns to something specific you're working on. From there, you can explore a guided pathway — or simply take what you've learned and apply it yourself. No pressure either way."
+              },
+            ].map((item, i) => (
+              <div key={i} style={{
+                borderBottom: i < 5 ? `1px solid ${COLORS.warmGraySubtle}` : "none",
+                paddingBottom: i < 5 ? "24px" : "0",
+              }}>
+                <h4 style={{
+                  fontFamily: FONTS.display, fontSize: "17px", fontWeight: 600,
+                  color: COLORS.charcoal, marginBottom: "8px",
+                }}>
+                  {item.q}
+                </h4>
+                <p style={{
+                  fontFamily: FONTS.body, fontSize: "15px", color: COLORS.charcoalLight,
+                  lineHeight: 1.7, margin: 0,
+                }}>
+                  {item.a}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ═══════════════════════════════════════════════════════════════════════
+          FINAL CTA
+          ═══════════════════════════════════════════════════════════════════════ */}
       <section style={{
-        padding: "80px 24px", textAlign: "center",
+        padding: "100px 24px", textAlign: "center",
         background: `linear-gradient(180deg, ${COLORS.cream} 0%, ${COLORS.goldSubtle} 100%)`,
       }}>
-        <div style={{ maxWidth: "480px", margin: "0 auto" }}>
+        <div style={{ maxWidth: "540px", margin: "0 auto" }}>
           <h2 style={{
-            fontFamily: FONTS.display, fontSize: "32px", fontWeight: 600,
-            color: COLORS.charcoal, marginBottom: "8px",
-          }}>Ready to see your patterns?</h2>
+            fontFamily: FONTS.display, fontSize: "36px", fontWeight: 600,
+            color: COLORS.charcoal, marginBottom: "16px",
+          }}>
+            Ready to see your patterns?
+          </h2>
+          <p style={{
+            fontFamily: FONTS.body, fontSize: "18px", color: COLORS.charcoalLight,
+            marginBottom: "12px", lineHeight: 1.7,
+          }}>
+            8 minutes to clarity. No account needed. Free.
+          </p>
           <p style={{
             fontFamily: FONTS.display, fontSize: "20px", fontStyle: "italic",
-            color: COLORS.gold, marginBottom: "32px",
+            color: COLORS.gold, marginBottom: "36px",
           }}>
             Align within.
           </p>
-          <button className="btn-primary" onClick={() => setPage("age-gate")} style={{ fontSize: "17px", padding: "16px 44px" }}>
+          <button className="btn-primary" onClick={() => setPage("age-gate")} style={{ fontSize: "18px", padding: "18px 52px" }}>
             Start the Assessment
           </button>
+          <p style={{
+            fontFamily: FONTS.body, fontSize: "13px", color: COLORS.warmGray,
+            marginTop: "20px",
+          }}>
+            By starting, you confirm you're 18+ and agree to our <span onClick={() => setPage("terms")} style={{ textDecoration: "underline", cursor: "pointer" }}>Terms</span>.
+          </p>
         </div>
       </section>
 
@@ -1779,4 +2201,10 @@ export default function AlignWithin() {
     </div>
   );
 }
+
+
+
+
+
+
 
